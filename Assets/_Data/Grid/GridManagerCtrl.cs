@@ -13,12 +13,15 @@ public class GridManagerCtrl : BaseSingleton<GridManagerCtrl>
     [SerializeField] protected FruitMatch fruitMatch;
     public FruitMatch FruitMatch => fruitMatch;
 
+    [SerializeField] protected FruitFall fruitFall;
+    public FruitFall FruitFall => fruitFall;
     protected override void LoadComponents()
     {
         base.LoadComponents();
         this.LoadFruitHandle();
         this.LoadGridSystem();
         this.LoadFruitMatch();
+        this.LoadFruitFall();
     }
     protected virtual void LoadFruitHandle()
     {
@@ -37,5 +40,11 @@ public class GridManagerCtrl : BaseSingleton<GridManagerCtrl>
         if (this.fruitMatch != null) return;
         this.fruitMatch = GetComponentInChildren<FruitMatch>();
         Debug.LogWarning(transform.name + ": Load FruitMatch ", gameObject);
+    }
+    protected virtual void LoadFruitFall()
+    {
+        if (this.fruitFall != null) return;
+        this.fruitFall = GetComponentInChildren<FruitFall>();
+        Debug.LogWarning(transform.name + ": Load FruitFall ", gameObject);
     }
 }

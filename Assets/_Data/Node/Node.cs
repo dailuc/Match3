@@ -21,8 +21,8 @@ public class Node
     {
         Vector2 worldPosition = new Vector2(this.worldPosX, this.worldPosY);
         RaycastHit2D hit = Physics2D.Raycast(worldPosition, Vector2.zero);
-
-        if (hit.collider != null)
+        Collider2D colider = hit.collider;
+        if (colider != null && colider.gameObject.tag == "Fruit")
         {
             return hit.collider.transform;
         }

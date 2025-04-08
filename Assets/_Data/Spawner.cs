@@ -35,7 +35,7 @@ public abstract class Spawner<T> : BaseSingleton<T> where T : MonoBehaviour
         this.HidePrefabs();
         Debug.LogWarning(transform.name + ": Load Prefabs ", gameObject);
     }
-    protected virtual void HidePrefabs() 
+    protected virtual void HidePrefabs()
     {
         foreach (Transform child in prefabs)
         {
@@ -45,7 +45,7 @@ public abstract class Spawner<T> : BaseSingleton<T> where T : MonoBehaviour
     public virtual Transform Spawn(string prefabName, Vector3 pos, Quaternion rot)
     {
         Transform prefab = this.GetPrefabByName(prefabName);
-        if(prefab == null)
+        if (prefab == null)
         {
             Debug.LogWarning("Prefab not found: " + prefabName);
             return null;
@@ -61,7 +61,7 @@ public abstract class Spawner<T> : BaseSingleton<T> where T : MonoBehaviour
     }
     public virtual void Despawn(List<Transform> objs)
     {
-        foreach(Transform child in objs)
+        foreach (Transform child in objs)
         {
             Despawn(child);
         }
@@ -73,9 +73,9 @@ public abstract class Spawner<T> : BaseSingleton<T> where T : MonoBehaviour
     }
     protected virtual Transform GetObjectFromPool(Transform prefab)
     {
-        foreach(var poolObj in poolObjs)
+        foreach (var poolObj in poolObjs)
         {
-            if(poolObj.name == prefab.name)
+            if (poolObj.name == prefab.name)
                 return poolObj;
         }
         Transform newPrefab = Instantiate(prefab);
@@ -87,28 +87,30 @@ public abstract class Spawner<T> : BaseSingleton<T> where T : MonoBehaviour
     {
         foreach (Transform child in prefabs)
         {
-            if(child.name == prefabName) return child;
+            if (child.name == prefabName) return child;
         }
         return null;
     }
-    public virtual Transform RandomPrefabs() 
+    public virtual Transform RandomPrefabs()
     {
         int rand = Random.Range(0, this.prefabs.Count);
         return this.prefabs[rand];
-    } 
-    public virtual Transform RandomPrefabs(List<string> preFabNames) 
+    }
+    public virtual Transform RandomPrefabsWithoutInvalid(List<string> preFabNames)
     {
         List<Transform> availablePrefabs = new List<Transform>(this.prefabs);
-
-        foreach(Transform prefab in this.prefabs)
+        if (preFabNames.Count > 0)
         {
-            foreach(string preFabName in preFabNames)
+            foreach (Transform prefab in this.prefabs)
             {
-                if(prefab.name == preFabName)
-                    availablePrefabs.Remove(prefab);
+                foreach (string preFabName in preFabNames)
+                {
+                    if (prefab.name == preFabName)
+                        availablePrefabs.Remove(prefab);
+                }
             }
-        }
 
+        }
         int rand = Random.Range(0, availablePrefabs.Count);
         return availablePrefabs[rand];
     }

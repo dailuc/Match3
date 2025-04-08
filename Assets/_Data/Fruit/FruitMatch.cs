@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -14,36 +15,42 @@ public class FruitMatch : GridManagerCtrlAbstract
     protected override void Start()
     {
         base.Start();
-       // Invoke(nameof(this.Checkfullboard),2f);
+        // Invoke(nameof(this.Checkfullboard),2f);
     }
-    public virtual bool HasDespawnMatch(Transform objStart, Transform objEnd)
+    public virtual List<Transform> ListDespawnMatch(Transform objStart, Transform objEnd)
     {
 
         Node nodeStart = GridManagerCtrl.GridSystem.GetNodeByWorldPos(objStart.position);
         Node nodeEnd = GridManagerCtrl.GridSystem.GetNodeByWorldPos(objEnd.position);
 
         Node[] nodeCheck = new Node[] { nodeStart, nodeEnd };
-        bool hasDespawn = false;
+        List<Transform> mergedList = new List<Transform>();
+
         for (int i = 0; i < nodeCheck.Length; i++)
         {
-            List<Transform>[] lists = { this.CheckVertical(nodeCheck[i]), this.CheckHorizontal(nodeCheck[i]) };
-
-            foreach (var list in lists)
-            {
-                if (list.Count >= 3)
-                {
-                    hasDespawn = this.HasDespawn(list);
-                }
-            }
+            List<Transform> list = this.CheckMatch(nodeCheck[i]);
+            mergedList.AddRange(list);
         }
-        return hasDespawn;
+        mergedList = mergedList.Distinct().ToList();
+       
+        return mergedList;
     }
-    protected virtual bool HasDespawn(List<Transform> Objs)
+    protected virtual List<Transform> CheckMatch(Node nodeCheck)
     {
+        List<List<Transform>> lists = new List<List<Transform>>
+                                    {this.CheckVertical(nodeCheck),
+                                    this.CheckHorizontal(nodeCheck)};
+        lists.RemoveAll(list => list.Count < 3);
+        List<Transform> mergedList = lists.SelectMany(list => list).ToList();
+                                       
+        return mergedList;
+    }
+    public virtual bool DespawnMatch(List<Transform> Objs)
+    {
+        if (Objs.Count == 0) return false;
         foreach (var obj in Objs)
         {
             Node node = GridManagerCtrl.GridSystem.GetNodeByWorldPos(obj.position);
-            Debug.Log(obj.name);
             node.occupied = false;
         }
         FruitSpawner.Instance.Despawn(Objs);
@@ -149,7 +156,7 @@ public class FruitMatch : GridManagerCtrlAbstract
     {
         Node[,] nodes = GridManagerCtrl.GridSystem.GetNodes();
 
-        int height = nodes.GetLength(0); 
+        int height = nodes.GetLength(0);
         int width = nodes.GetLength(1);
 
         List<Transform> verticalObj = new List<Transform>();
@@ -180,7 +187,7 @@ public class FruitMatch : GridManagerCtrlAbstract
                 Transform obj = node.GetObjectAtPosition2D();
 
                 if (horizontalObj.Contains(obj)) continue;
-                var rightList = this.CheckRight(node,obj);
+                var rightList = this.CheckRight(node, obj);
                 if (rightList.Count >= 3)
                 {
                     horizontalObj.AddRange(rightList);

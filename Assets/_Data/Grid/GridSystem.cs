@@ -103,14 +103,15 @@ public class GridSystem : GridManagerCtrlAbstract
                 pos.x = node.worldPosX;
                 pos.y = node.worldPosY;
 
-                List<string> notValidPrefabs = this.NotValidPrefabs(node);
-                Transform obj = FruitSpawner.Instance.Spawn(FruitSpawner.Instance.RandomPrefabs(notValidPrefabs), pos, Quaternion.identity);
+                List<string> notValidPrefabs = this.InValidPrefabs(node);
+                Transform obj = FruitSpawner.Instance.Spawn
+                               (FruitSpawner.Instance.RandomPrefabsWithoutInvalid(notValidPrefabs), pos, Quaternion.identity);
                 node.occupied = true;
                 obj.gameObject.SetActive(true);
             }
         }
     }
-    protected virtual List<string> NotValidPrefabs(Node node)
+    protected virtual List<string> InValidPrefabs(Node node)
     {
         Transform obj1;
         Transform obj2;

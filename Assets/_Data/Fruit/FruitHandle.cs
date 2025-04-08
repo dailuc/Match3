@@ -42,6 +42,7 @@ public class FruitHandle : GridManagerCtrlAbstract
 
             Node nodeStart = GridManagerCtrl.GridSystem.GetNodeByWorldPos(fruitStart.position);
             Node nodeEnd = GridManagerCtrl.GridSystem.GetNodeByWorldPos(fruitEnd.position);
+        if(nodeStart == nodeEnd) { this.ReSetObject(); return; }
         if (nodeStart.up != nodeEnd
             && nodeStart.down != nodeEnd
             && nodeStart.left != nodeEnd
@@ -65,15 +66,21 @@ public class FruitHandle : GridManagerCtrlAbstract
         if (!this.isSwapping) return;
 
         this.SwapFruit();
-
+        List<Transform> ListDespawn;
         if (IsSwappingFinish())
         {
             bool hasDespawn = false;
+
             if (!this.OnBusy)
             {
-                hasDespawn = GridManagerCtrl.Instance.FruitMatch.HasDespawnMatch(fruitStart, fruitEnd);
-            } 
-
+                ListDespawn = GridManagerCtrl.FruitMatch.ListDespawnMatch(fruitStart, fruitEnd);
+                if(ListDespawn.Count > 0)
+                {
+                    hasDespawn = true;
+                    this.ReSetObject();
+                    this.GridManagerCtrl.FruitMatch.DespawnMatch(ListDespawn);
+                }
+            }
             if (!hasDespawn && !this.OnBusy)
             {
                 Transform tempFruit = this.fruitStart;
@@ -85,7 +92,7 @@ public class FruitHandle : GridManagerCtrlAbstract
                 this.ReSetObject();
                 this.isSwapping = false;
                 this.isCanSwap = false;
-                this.OnBusy = false;
+                this.OnBusy = false; 
             }
         }
     }
