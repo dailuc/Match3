@@ -6,7 +6,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
 
-public class GridSystem : GridManagerCtrlAbstract
+public class GridSystem : GamePlayManagerCtrlAbstract
 {
     [Header("GridSystem")]
     [SerializeField] protected int width;
@@ -44,7 +44,6 @@ public class GridSystem : GridManagerCtrlAbstract
                     worldPosX = x * (1 + this.offsetX),
                     worldPosY = y * (1 + this.offsetY)
                 };
-
                 nodes[x, y] = node;
             }
         }
@@ -72,6 +71,10 @@ public class GridSystem : GridManagerCtrlAbstract
 
         return this.nodes[x, y];
     }
+    public virtual Node GetNodeByObject(Transform obj)
+    {
+       return this.GetNodeByWorldPos(obj.position);
+    }
     public virtual Node GetNodeByWorldPos(Vector3 worldPos)
     {
         Vector2Int XY = this.GetXYByWorldPos(worldPos);
@@ -90,6 +93,13 @@ public class GridSystem : GridManagerCtrlAbstract
             node.left = this.GetNodeByXY(x - 1, y);
         }
     }
+    public virtual void SwapNode(Transform objA, Transform ObjB)
+    {
+        Node nodeA = this.GetNodeByObject(objA);
+        Node nodeB = this.GetNodeByObject(ObjB);
+
+        nodeA.SwapObject(nodeB);
+    }
     protected virtual void SpawnObj()
     {
         Vector3 pos = Vector3.zero;
@@ -106,7 +116,7 @@ public class GridSystem : GridManagerCtrlAbstract
                 List<string> notValidPrefabs = this.InValidPrefabs(node);
                 Transform obj = FruitSpawner.Instance.Spawn
                                (FruitSpawner.Instance.RandomPrefabsWithoutInvalid(notValidPrefabs), pos, Quaternion.identity);
-                node.occupied = true;
+                node.SetObject(obj);
                 obj.gameObject.SetActive(true);
             }
         }
@@ -121,7 +131,7 @@ public class GridSystem : GridManagerCtrlAbstract
 
         foreach (Node direction in directions)
         {
-            obj1 = direction?.GetObjectAtPosition2D();
+            obj1 = direction?.GetObject();
 
             if (direction == null || obj1 == null) continue;
 
@@ -131,7 +141,7 @@ public class GridSystem : GridManagerCtrlAbstract
             else if (direction == node.left) nextDirection = direction.left;
             else if (direction == node.right) nextDirection = direction.right;
 
-            obj2 = nextDirection?.GetObjectAtPosition2D();
+            obj2 = nextDirection?.GetObject();
 
             if (nextDirection == null || obj2 == null) continue;
 

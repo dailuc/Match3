@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class FruitMatch : GridManagerCtrlAbstract
+public class FruitMatch : GamePlayManagerCtrlAbstract
 {
     [Header("FruitMatch")]
     [SerializeField] protected bool hasMatch = false;
@@ -15,7 +15,7 @@ public class FruitMatch : GridManagerCtrlAbstract
     protected override void Start()
     {
         base.Start();
-        // Invoke(nameof(this.Checkfullboard),2f);
+        Invoke(nameof(this.Checkfullboard), 2f);
     }
     public virtual List<Transform> ListDespawnMatch(Transform objStart, Transform objEnd)
     {
@@ -32,7 +32,7 @@ public class FruitMatch : GridManagerCtrlAbstract
             mergedList.AddRange(list);
         }
         mergedList = mergedList.Distinct().ToList();
-       
+
         return mergedList;
     }
     protected virtual List<Transform> CheckMatch(Node nodeCheck)
@@ -42,25 +42,26 @@ public class FruitMatch : GridManagerCtrlAbstract
                                     this.CheckHorizontal(nodeCheck)};
         lists.RemoveAll(list => list.Count < 3);
         List<Transform> mergedList = lists.SelectMany(list => list).ToList();
-                                       
+
         return mergedList;
     }
     public virtual bool DespawnMatch(List<Transform> Objs)
     {
         if (Objs.Count == 0) return false;
-        foreach (var obj in Objs)
+        GridSystem gridSystem = GridManagerCtrl.GridSystem;
+        foreach (Transform obj in Objs)
         {
-            Node node = GridManagerCtrl.GridSystem.GetNodeByWorldPos(obj.position);
-            node.occupied = false;
+            Node node = gridSystem.GetNodeByObject(obj);
+            node.obj = null;
+            FruitSpawner.Instance.Despawn(obj);
         }
-        FruitSpawner.Instance.Despawn(Objs);
         return true;
     }
     protected virtual List<Transform> CheckHorizontal(Node node)
     {
         List<Transform> horizontalObj = new List<Transform>();
 
-        Transform obj = node.GetObjectAtPosition2D();
+        Transform obj = node.GetObject();
         horizontalObj.Add(obj);
 
         Node leftNode = node.left;
@@ -77,7 +78,7 @@ public class FruitMatch : GridManagerCtrlAbstract
         List<Transform> verticalObj = new List<Transform>();
 
 
-        Transform obj = node.GetObjectAtPosition2D();
+        Transform obj = node.GetObject();
         verticalObj.Add(obj);
 
         Node upNode = node.up;
@@ -95,7 +96,7 @@ public class FruitMatch : GridManagerCtrlAbstract
 
         while (rightNode != null)
         {
-            Transform objRight = rightNode.GetObjectAtPosition2D();
+            Transform objRight = rightNode.GetObject();
             if (objRight == null) break;
             if (objRight.name != obj.name) break;
 
@@ -111,7 +112,7 @@ public class FruitMatch : GridManagerCtrlAbstract
 
         while (leftNode != null)
         {
-            Transform objLeft = leftNode.GetObjectAtPosition2D();
+            Transform objLeft = leftNode.GetObject();
             if (objLeft == null) break;
             if (objLeft.name != obj.name) break;
 
@@ -127,7 +128,7 @@ public class FruitMatch : GridManagerCtrlAbstract
 
         while (upNode != null)
         {
-            Transform objUp = upNode.GetObjectAtPosition2D();
+            Transform objUp = upNode.GetObject();
             if (objUp == null) break;
             if (objUp.name != obj.name) break;
 
@@ -143,7 +144,7 @@ public class FruitMatch : GridManagerCtrlAbstract
 
         while (downNode != null)
         {
-            Transform objDown = downNode.GetObjectAtPosition2D();
+            Transform objDown = downNode.GetObject();
             if (objDown == null) break;
             if (objDown.name != obj.name) break;
 
@@ -166,7 +167,7 @@ public class FruitMatch : GridManagerCtrlAbstract
             for (int j = 0; j < height; j++)
             {
                 Node node = nodes[i, j];
-                Transform obj = node.GetObjectAtPosition2D();
+                Transform obj = node.GetObject();
 
                 if (verticalObj.Contains(obj)) continue;
                 var upList = this.CheckUp(node, obj);
@@ -184,7 +185,7 @@ public class FruitMatch : GridManagerCtrlAbstract
             for (int j = 0; j < width; j++)
             {
                 Node node = nodes[i, j];
-                Transform obj = node.GetObjectAtPosition2D();
+                Transform obj = node.GetObject();
 
                 if (horizontalObj.Contains(obj)) continue;
                 var rightList = this.CheckRight(node, obj);
@@ -195,6 +196,7 @@ public class FruitMatch : GridManagerCtrlAbstract
             }
         }
         verticalObj.AddRange(horizontalObj);
+        verticalObj = verticalObj.Distinct().ToList();
         return verticalObj;
     }
 

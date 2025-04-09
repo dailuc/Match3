@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GridManagerCtrlAbstract : BaseMonoBehaviour
+public abstract class GamePlayManagerCtrlAbstract : BaseMonoBehaviour
 {
     [Header("GridManagerCtrlAbstract")]
-    [SerializeField] private GridManagerCtrl gridManagerCtrl;
-    public GridManagerCtrl GridManagerCtrl => gridManagerCtrl;
+    [SerializeField] private GamePlayManagerCtrl gridManagerCtrl;
+    public GamePlayManagerCtrl GridManagerCtrl => gridManagerCtrl;
 
     protected override void LoadComponents()
     {
@@ -16,7 +16,7 @@ public abstract class GridManagerCtrlAbstract : BaseMonoBehaviour
     protected virtual void LoadGridManagerCtrl()
     {
         if (this.gridManagerCtrl != null) return;
-        this.gridManagerCtrl = GetComponentInParent<GridManagerCtrl>();
+        this.gridManagerCtrl = GetComponentInParent<GamePlayManagerCtrl>();
         Debug.LogWarning(transform.name + ": Load GridManagerCtrl ", gameObject);
     }
 

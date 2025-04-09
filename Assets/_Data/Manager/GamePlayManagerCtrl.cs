@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridManagerCtrl : BaseSingleton<GridManagerCtrl>
+public class GamePlayManagerCtrl : BaseSingleton<GamePlayManagerCtrl>
 {
     [SerializeField] protected FruitHandle fruitHandle;
     public FruitHandle FruitHandle => fruitHandle;

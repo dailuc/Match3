@@ -26,6 +26,8 @@ public class FruitClickable : BaseMonoBehaviour
     }
     private void OnMouseUp()
     {
-        GridManagerCtrl.Instance.FruitHandle.SetFruit(this.transform);
+        GamePlayManagerCtrl.Instance.FruitHandle.SetFruit(this.transform);
+        //Node node = GridManagerCtrl.Instance.GridSystem.GetNodeByObject(this.transform);
+        //Debug.Log(node.x +"/"+node.y+" = "+ node.GetObject().name);
     }
 }

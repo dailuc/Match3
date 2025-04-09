@@ -519,7 +519,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridManagerCtrl: {fileID: 459835610}
-  objsMove: []
+  speedDrop: 8
 --- !u!1 &845843912
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,21 +12,41 @@ public class Node
     public float worldPosY = 0;
     public int weight = 1;
     public bool occupied = false;
+    public Transform obj;
     public Node up;
     public Node right;
     public Node down;
     public Node left;
 
-    public Transform GetObjectAtPosition2D()
+    public Transform GetObject()
+    { 
+        return obj;
+    }
+    public void SetObject(Transform obj)
     {
-        Vector2 worldPosition = new Vector2(this.worldPosX, this.worldPosY);
-        RaycastHit2D hit = Physics2D.Raycast(worldPosition, Vector2.zero);
-        Collider2D colider = hit.collider;
-        if (colider != null && colider.gameObject.tag == "Fruit")
+        this.obj = obj;
+    }
+    public void SwapObject(Node node)
+    {
+        Transform tempObj = this.obj;
+        this.obj = node.GetObject();
+        node.SetObject(tempObj);
+    }
+    public void StealObject(Node node)
+    {
+        this.obj = node.obj;
+        node.obj = null;
+    }
+    public Vector3 GetWorldPos()
+    {
+        return new Vector3(worldPosX, worldPosY);
+    }
+    public bool IsObjectActive()
+    {
+        if (this.obj == null)
         {
-            return hit.collider.transform;
+            return false;
         }
-
-        return null;
+        return this.obj.gameObject.activeSelf;
     }
 }

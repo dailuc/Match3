@@ -76,7 +76,11 @@ public abstract class Spawner<T> : BaseSingleton<T> where T : MonoBehaviour
         foreach (var poolObj in poolObjs)
         {
             if (poolObj.name == prefab.name)
+            {
+                poolObjs.Remove(poolObj);
                 return poolObj;
+            }
+               
         }
         Transform newPrefab = Instantiate(prefab);
         newPrefab.name = prefab.name;
