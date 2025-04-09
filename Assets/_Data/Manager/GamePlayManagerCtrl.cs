@@ -4,30 +4,31 @@ using UnityEngine;
 
 public class GamePlayManagerCtrl : BaseSingleton<GamePlayManagerCtrl>
 {
-    [SerializeField] protected FruitHandle fruitHandle;
-    public FruitHandle FruitHandle => fruitHandle;
+    [Header("GamePlayManagerCtrl")]
+    [SerializeField] protected ObjectHandleGamePlay objectHandle;
+    public ObjectHandleGamePlay ObjectHandle => objectHandle;
 
     [SerializeField] protected GridSystem gridSystem;
     public GridSystem GridSystem => gridSystem;
 
-    [SerializeField] protected FruitMatch fruitMatch;
-    public FruitMatch FruitMatch => fruitMatch;
+    [SerializeField] protected ObjectMatch objectMatch;
+    public ObjectMatch ObjectMatch => objectMatch;
 
-    [SerializeField] protected FruitFall fruitFall;
-    public FruitFall FruitFall => fruitFall;
+    [SerializeField] protected ObjectDrop objectFall;
+    public ObjectDrop ObjectFall => objectFall;
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        this.LoadFruitHandle();
+        this.LoadObjectHandle();
         this.LoadGridSystem();
-        this.LoadFruitMatch();
-        this.LoadFruitFall();
+        this.LoadObjectMatch();
+        this.LoadObjectDrop();
     }
-    protected virtual void LoadFruitHandle()
+    protected virtual void LoadObjectHandle()
     {
-        if (this.fruitHandle != null) return;
-        this.fruitHandle = GetComponentInChildren<FruitHandle>();
-        Debug.LogWarning(transform.name + ": Load FruitHandle ", gameObject);
+        if (this.objectHandle != null) return;
+        this.objectHandle = GetComponentInChildren<ObjectHandleGamePlay>();
+        Debug.LogWarning(transform.name + ": Load Object Handle ", gameObject);
     }
     protected virtual void LoadGridSystem()
     {
@@ -35,16 +36,16 @@ public class GamePlayManagerCtrl : BaseSingleton<GamePlayManagerCtrl>
         this.gridSystem = GetComponentInChildren<GridSystem>();
         Debug.LogWarning(transform.name + ": Load GridSystem ", gameObject);
     }
-    protected virtual void LoadFruitMatch()
+    protected virtual void LoadObjectMatch()
     {
-        if (this.fruitMatch != null) return;
-        this.fruitMatch = GetComponentInChildren<FruitMatch>();
-        Debug.LogWarning(transform.name + ": Load FruitMatch ", gameObject);
+        if (this.objectMatch != null) return;
+        this.objectMatch = GetComponentInChildren<ObjectMatch>();
+        Debug.LogWarning(transform.name + ": Load Object Match ", gameObject);
     }
-    protected virtual void LoadFruitFall()
+    protected virtual void LoadObjectDrop()
     {
-        if (this.fruitFall != null) return;
-        this.fruitFall = GetComponentInChildren<FruitFall>();
-        Debug.LogWarning(transform.name + ": Load FruitFall ", gameObject);
+        if (this.objectFall != null) return;
+        this.objectFall = GetComponentInChildren<ObjectDrop>();
+        Debug.LogWarning(transform.name + ": Load Object Drop ", gameObject);
     }
 }

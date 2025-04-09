@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class GamePlayManagerCtrlAbstract : BaseMonoBehaviour
 {
-    [Header("GridManagerCtrlAbstract")]
-    [SerializeField] private GamePlayManagerCtrl gridManagerCtrl;
-    public GamePlayManagerCtrl GridManagerCtrl => gridManagerCtrl;
+    [Header("GamePlayManagerCtrlAbstract")]
+    [SerializeField] private GamePlayManagerCtrl gamePlayManagerCtrl;
+    public GamePlayManagerCtrl GamePlayManagerCtrl => gamePlayManagerCtrl;
 
     protected override void LoadComponents()
     {
@@ -15,9 +15,9 @@ public abstract class GamePlayManagerCtrlAbstract : BaseMonoBehaviour
     }
     protected virtual void LoadGridManagerCtrl()
     {
-        if (this.gridManagerCtrl != null) return;
-        this.gridManagerCtrl = GetComponentInParent<GamePlayManagerCtrl>();
-        Debug.LogWarning(transform.name + ": Load GridManagerCtrl ", gameObject);
+        if (this.gamePlayManagerCtrl != null) return;
+        this.gamePlayManagerCtrl = GetComponentInParent<GamePlayManagerCtrl>();
+        Debug.LogWarning(transform.name + ": Load GamePlayManagerCtrl ", gameObject);
     }
 
 }

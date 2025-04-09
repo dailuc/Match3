@@ -19,17 +19,21 @@ public class GridSystem : GamePlayManagerCtrlAbstract
     [SerializeField] protected float offsetY;
     [SerializeField] protected Transform prefab;
     [SerializeField] protected Node[,] nodes;
+
+    [SerializeField] protected Transform[] spawnPoints;
+    public Transform[] SpawnPonits => spawnPoints;
     protected override void Awake()
     {
-        this.InitGridSystem();
+        this.GenerateGridSystem();
         this.FindNodesNeighbors();
     }
     protected override void Start()
     {
         base.Start();
         this.SpawnObj();
+        this.GenerateSpawnPoint();
     }
-    protected virtual void InitGridSystem()
+    protected virtual void GenerateGridSystem()
     {
         nodes = new Node[width, height];
 
@@ -47,6 +51,28 @@ public class GridSystem : GamePlayManagerCtrlAbstract
                 nodes[x, y] = node;
             }
         }
+    }
+    protected virtual void GenerateSpawnPoint()
+    {
+        spawnPoints = new Transform[width];
+        for (int x = 0; x < width; x++)
+        {
+            float worldPosX = x * (1 + this.offsetX);
+            float worldPosY = height * (1 + this.offsetY);
+
+            Vector3 spawnPosition = new Vector3(worldPosX, worldPosY, 0f);
+            Transform spawnPoint = PointSpawner.Instance.Spawn(PointSpawner.Point, spawnPosition, Quaternion.identity);
+
+            spawnPoint.gameObject.SetActive(true);
+
+            spawnPoints[x] = spawnPoint;
+        }
+    }
+    public virtual Vector3 PositionSpawn(Node node, int addHeight)
+    {
+        float worldPosX = node.x * (1 + this.offsetX);
+        float worldPosY = (height + addHeight) * (1 + this.offsetY);
+        return new Vector3(worldPosX, worldPosY);
     }
     public virtual Node[,] GetNodes()
     {
@@ -73,7 +99,7 @@ public class GridSystem : GamePlayManagerCtrlAbstract
     }
     public virtual Node GetNodeByObject(Transform obj)
     {
-       return this.GetNodeByWorldPos(obj.position);
+        return this.GetNodeByWorldPos(obj.position);
     }
     public virtual Node GetNodeByWorldPos(Vector3 worldPos)
     {

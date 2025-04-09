@@ -49,4 +49,5 @@ public class Node
         }
         return this.obj.gameObject.activeSelf;
     }
+
 }
