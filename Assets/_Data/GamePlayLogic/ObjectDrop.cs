@@ -50,12 +50,14 @@ public class ObjectDrop : GamePlayManagerCtrlAbstract
     }
     protected virtual void SpawnObjectToNode(List<Node> nodeObjectsNotFound)
     {
-        foreach (Node nodeNotF in nodeObjectsNotFound)
+        for (int index = 0; index < nodeObjectsNotFound.Count; index++)
         {
-            Vector3 pos = GamePlayManagerCtrl.GridSystem.PositionSpawn(nodeNotF, nodeObjectsNotFound.IndexOf(nodeNotF));
-            Transform obj = FruitSpawner.Instance.Spawn(FruitSpawner.Instance.RandomPrefabs(),
-                                                pos, Quaternion.identity);
-            nodeNotF.SetObject(obj);
+            Node node = nodeObjectsNotFound[index];
+            Vector3 pos = GamePlayManagerCtrl.GridSystem.PositionSpawn(node, index);
+            Transform obj = FruitSpawner.Instance.Spawn(FruitSpawner.Instance.RandomPrefabs()
+                                                    , pos,Quaternion.identity);
+
+            node.SetObject(obj);
             obj.gameObject.SetActive(true);
         }
     }
