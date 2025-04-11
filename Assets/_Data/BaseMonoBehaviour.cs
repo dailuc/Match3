@@ -17,7 +17,14 @@ public class BaseMonoBehaviour : MonoBehaviour
         this.LoadComponents();
         this.ResetValue();
     }
-
+    protected virtual void OnEnable()
+    {
+        
+    }
+    protected virtual void OnDisable()
+    {
+        
+    }
     protected virtual void LoadComponents()
     {
         //For override

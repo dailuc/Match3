@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HightLightSpawner : Spawner<HightLightSpawner>
+public class VFXSpawner : Spawner<VFXSpawner>
 {
     [SerializeField] public static string ClickHightLight = "ClickHightLight";
 }

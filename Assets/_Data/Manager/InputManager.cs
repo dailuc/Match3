@@ -1,15 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerInputController : BaseMonoBehaviour
+public class InputManager : BaseSingleton<InputManager>
 {
-    [Header("Player Input Controller")]
+    [Header("InputManager")]
     [SerializeField] private bool isAllowClick = true;
     [SerializeField] private Transform selectedObject;
     [SerializeField] private Camera mainCamera;
-
+    [SerializeField] public static event Action<Transform, PowerUpCode> OnPowerUpActive;
+    [SerializeField] public static event Action<Transform> SetObjectSwap;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -27,76 +29,72 @@ public class PlayerInputController : BaseMonoBehaviour
     {
         if (!isAllowClick) return;
 
-        HandleInput();
-        DragSelectedObject();
+        this.HandleInput();
+       // this.DragSelectedObject();
     }
 
     protected virtual void HandleInput()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            TrySelectObject();
+            SelectObject();
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            TryDropObject();
+            DropObject();
         }
     }
 
-    private void TrySelectObject()
+    private void SelectObject()
     {
-        Transform hitObject = GetObjectUnderMouse();
+        Transform hitObject = this.GetObjectUnderMouse();
         if (hitObject == null) return;
 
         switch (hitObject.tag)
         {
             case "Fruit":
-                GamePlayManagerCtrl.Instance.ObjectHandle.SetObject(hitObject);
-                break;
-
-            case "PowerUp":
-                selectedObject = hitObject;
+                SetObjectSwap?.Invoke(hitObject);
                 break;
         }
     }
 
-    private void TryDropObject()
+    private void DropObject()
     {
-        if (selectedObject == null) return;
+        if (this.selectedObject == null) return;
 
-        Transform[] hitObjects = GetAllObjectUnderMouse();
+        Transform[] hitObjects = this.GetAllObjectUnderMouse();
         if(hitObjects.Length == 0) return;
-
         for (int i = 0; i < hitObjects.Length; i++)
         {
             if (hitObjects[i] != null && hitObjects[i].CompareTag("Fruit"))
             {
-                GamePlayManagerCtrl.Instance.PowerUpHandle.ActivePowerUp(hitObjects[i]); 
+                OnPowerUpActive?.Invoke(hitObjects[i].transform, 
+                                PowerUpCodeParser.Fromstring(this.selectedObject.name));
+                PointSpawner.Instance.Despawn(this.selectedObject);
                 break;
             }
         }
-        PointSpawner.Instance.Despawn(this.selectedObject);
-        selectedObject = null; 
+        this.selectedObject = null; 
     }
 
     private void DragSelectedObject()
     {
-        if (selectedObject == null) return;
+        if (this.selectedObject == null) return;
 
-        Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        selectedObject.position = new Vector3(mousePos.x, mousePos.y, selectedObject.position.z);
+        Vector2 mousePos = this.mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        this.selectedObject.position = new Vector3(mousePos.x, mousePos.y, selectedObject.position.z);
     }
 
-    private Transform GetObjectUnderMouse()
+    public Transform GetObjectUnderMouse()
     {
-        Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = this.mainCamera.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
         return hit.collider != null ? hit.transform : null;
     }
-    private Transform[] GetAllObjectUnderMouse()
+    public Transform[] GetAllObjectUnderMouse()
     {
-        Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = this.mainCamera.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D[] hit = Physics2D.RaycastAll(mousePos, Vector2.zero);
         Transform[] objects = new Transform[hit.Length];
         for (int i = 0; i < hit.Length; i++)
@@ -110,11 +108,11 @@ public class PlayerInputController : BaseMonoBehaviour
 
     public void SetSelectedObject(Transform obj)
     {
-        selectedObject = obj;
+        this.selectedObject = obj;
     }
 
-    public void EnableClick() => isAllowClick = true;
+    public void EnableClick() => this.isAllowClick = true;
 
-    public void DisableClick() => isAllowClick = false;
+    public void DisableClick() => this.isAllowClick = false;
 
 }

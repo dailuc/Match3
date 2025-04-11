@@ -6,34 +6,34 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
+public class SwapMatchResult
+{
+    public Node nodeStart { get; set; }
+    public List<Transform> listStart { get; set; }
+    public Node nodeEnd { get; set; }
+    public List<Transform> listEnd { get; set; }
+}
 public class ObjectMatch : GamePlayManagerCtrlAbstract
 {
     [Header("Object Match")]
     [SerializeField] protected bool hasMatch = false;
-    [SerializeField]
 
-    //protected override void Start()
-    //{
-    //    base.Start();
-    //    Invoke(nameof(this.CheckFullBoard), 2f);
-    //}
-    public virtual List<Transform> ListDespawnMatch(Transform objStart, Transform objEnd)
+    public virtual SwapMatchResult SwapMatch(Transform objStart, Transform objEnd)
     {
 
         Node nodeStart = GamePlayManagerCtrl.GridSystem.GetNodeByWorldPos(objStart.position);
         Node nodeEnd = GamePlayManagerCtrl.GridSystem.GetNodeByWorldPos(objEnd.position);
 
-        Node[] nodeCheck = new Node[] { nodeStart, nodeEnd };
-        List<Transform> mergedList = new List<Transform>();
 
-        for (int i = 0; i < nodeCheck.Length; i++)
+        List<Transform> listStart = this.CheckMatch(nodeStart);
+        List<Transform> listEnd = this.CheckMatch(nodeEnd);
+        return new SwapMatchResult
         {
-            List<Transform> list = this.CheckMatch(nodeCheck[i]);
-            mergedList.AddRange(list);
-        }
-        mergedList = mergedList.Distinct().ToList();
-
-        return mergedList;
+            nodeStart = nodeStart,
+            listStart = listStart,
+            nodeEnd = nodeEnd,
+            listEnd = listEnd
+        };
     }
    
     public virtual bool DespawnMatch(List<Transform> Objs)

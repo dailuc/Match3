@@ -2,8 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUpBom : GamePlayManagerCtrlAbstract
+public class PowerUpBomb : BasePowerUp
 {
+    public override void ActivePowerUp(Transform ObjectActive, PowerUpCode code)
+    {
+        if (code != PowerUpCode.Bomb) return;
+        List<Transform> affectedObjects = this.CalculateExplosionArea(ObjectActive);
+      //  StartCoroutine(this.GamePlayManagerCtrl.ObjectHandle.ProcessChainReaction(affectedObjects));
+    }
     public virtual List<Transform> CalculateExplosionArea(Transform obj)
     {
         List<Transform> affectedObjects = new List<Transform>();
@@ -25,4 +31,5 @@ public class PowerUpBom : GamePlayManagerCtrlAbstract
 
         return affectedObjects;
     }
+  
 }

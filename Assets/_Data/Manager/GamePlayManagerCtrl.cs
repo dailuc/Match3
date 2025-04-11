@@ -17,12 +17,8 @@ public class GamePlayManagerCtrl : BaseSingleton<GamePlayManagerCtrl>
     [SerializeField] protected ObjectDrop objectFall;
     public ObjectDrop ObjectFall => objectFall;
 
-    [SerializeField] protected PowerUpBom powerUpBom;
-    public PowerUpBom PowerUpBom => powerUpBom;
-
-    [SerializeField] protected PowerUpHandleGamePlay powerUpHandle;
-
-    public PowerUpHandleGamePlay PowerUpHandle => powerUpHandle;
+    [SerializeField] protected ObjectSwap objectSwap;
+    public ObjectSwap ObjectSwap => objectSwap;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -30,8 +26,7 @@ public class GamePlayManagerCtrl : BaseSingleton<GamePlayManagerCtrl>
         this.LoadGridSystem();
         this.LoadObjectMatch();
         this.LoadObjectDrop();
-        this.LoadBomPowerUp();
-        this.LoadPowerUpHandleGamePlay();
+        this.LoadObjectSwap();
     }
     protected virtual void LoadObjectHandle()
     {
@@ -57,16 +52,10 @@ public class GamePlayManagerCtrl : BaseSingleton<GamePlayManagerCtrl>
         this.objectFall = GetComponentInChildren<ObjectDrop>();
         Debug.LogWarning(transform.name + ": Load Object Drop ", gameObject);
     }
-    protected virtual void LoadBomPowerUp()
+    protected virtual void LoadObjectSwap()
     {
-        if (this.powerUpBom != null) return;
-        this.powerUpBom = GetComponentInChildren<PowerUpBom>();
-        Debug.LogWarning(transform.name + ": Load Bom PowerUp ", gameObject);
-    }
-    protected virtual void LoadPowerUpHandleGamePlay()
-    {
-        if (this.powerUpHandle != null) return;
-        this.powerUpHandle = GetComponentInChildren<PowerUpHandleGamePlay>();
-        Debug.LogWarning(transform.name + ": Load PowerUp Handle GamePlay ", gameObject);
+         if (this.objectSwap != null) return;
+        this.objectSwap = GetComponentInChildren<ObjectSwap>();
+        Debug.LogWarning(transform.name + ": Load Object Swap ", gameObject);
     }
 }

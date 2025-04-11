@@ -8,7 +8,7 @@ using static UnityEditor.Progress;
 public class ObjectDrop : GamePlayManagerCtrlAbstract
 {
     [Header("Object Drop")]
-    [SerializeField] protected float acceleration = 20f;
+    [SerializeField] protected float speed = 20f;
 
     public virtual List<Node> FindObjectDrop()
     {
@@ -79,11 +79,9 @@ public class ObjectDrop : GamePlayManagerCtrlAbstract
     {
         Transform obj = node.GetObject();
         Vector3 targetPos = node.GetWorldPos();
-        float speed = 1f;
 
         while (Vector3.Distance(obj.position, targetPos) > 0.01f)
         {
-            speed += acceleration * Time.fixedDeltaTime;
             obj.position = Vector3.MoveTowards(obj.position, targetPos, speed * Time.fixedDeltaTime);
             yield return null;
         }
