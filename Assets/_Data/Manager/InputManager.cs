@@ -66,15 +66,7 @@ public class InputManager : BaseSingleton<InputManager>
         Transform[] hitObjects = this.GetAllObjectUnderMouse();
         if(hitObjects.Length == 0) return;
         for (int i = 0; i < hitObjects.Length; i++)
-        {
-            if (hitObjects[i] != null && hitObjects[i].CompareTag("Fruit"))
-            {
-                OnPowerUpActive?.Invoke(hitObjects[i].transform, 
-                                PowerUpCodeParser.Fromstring(this.selectedObject.name));
-                PointSpawner.Instance.Despawn(this.selectedObject);
-                break;
-            }
-        }
+       
         this.selectedObject = null; 
     }
 

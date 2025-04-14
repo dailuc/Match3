@@ -1,14 +1,14 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PowerUpBomb : BasePowerUp
 {
-    public override void ActivePowerUp(Transform ObjectActive, PowerUpCode code)
+    public override List<Transform> PowerUpDespawn(Transform ObjectActive, PowerUpCode code)
     {
-        if (code != PowerUpCode.Bomb) return;
         List<Transform> affectedObjects = this.CalculateExplosionArea(ObjectActive);
-      //  StartCoroutine(this.GamePlayManagerCtrl.ObjectHandle.ProcessChainReaction(affectedObjects));
+  
+        return affectedObjects;
     }
     public virtual List<Transform> CalculateExplosionArea(Transform obj)
     {
@@ -24,11 +24,12 @@ public class PowerUpBomb : BasePowerUp
         if (centerNode.right != null) affectedObjects.Add(centerNode.right.obj);
 
         // 4 diagonal directions
-        if (centerNode.up.left != null) affectedObjects.Add(centerNode.up.left.obj);
-        if (centerNode.up.right != null) affectedObjects.Add(centerNode.up.right.obj);
-        if (centerNode.down.left != null) affectedObjects.Add(centerNode.down.left.obj);
-        if (centerNode.down.right != null) affectedObjects.Add(centerNode.down.right.obj);
+        if (centerNode.up?.left != null) affectedObjects.Add(centerNode.up.left.obj);
+        if (centerNode.up?.right != null) affectedObjects.Add(centerNode.up.right.obj);
+        if (centerNode.down?.left != null) affectedObjects.Add(centerNode.down.left.obj);
+        if (centerNode.down?.right != null) affectedObjects.Add(centerNode.down.right.obj);
 
+       
         return affectedObjects;
     }
   

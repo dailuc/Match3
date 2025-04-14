@@ -19,6 +19,9 @@ public class GamePlayManagerCtrl : BaseSingleton<GamePlayManagerCtrl>
 
     [SerializeField] protected ObjectSwap objectSwap;
     public ObjectSwap ObjectSwap => objectSwap;
+
+    [SerializeField] protected PowerUpManagerCtrl powerUpManagerCtrl;
+    public PowerUpManagerCtrl PowerUpManagerCtrl => powerUpManagerCtrl;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -27,6 +30,7 @@ public class GamePlayManagerCtrl : BaseSingleton<GamePlayManagerCtrl>
         this.LoadObjectMatch();
         this.LoadObjectDrop();
         this.LoadObjectSwap();
+        this.LoadPowerUpManagerCtrl();
     }
     protected virtual void LoadObjectHandle()
     {
@@ -57,5 +61,11 @@ public class GamePlayManagerCtrl : BaseSingleton<GamePlayManagerCtrl>
          if (this.objectSwap != null) return;
         this.objectSwap = GetComponentInChildren<ObjectSwap>();
         Debug.LogWarning(transform.name + ": Load Object Swap ", gameObject);
+    }
+    protected virtual void LoadPowerUpManagerCtrl()
+    {
+        if (this.powerUpManagerCtrl != null) return;
+        this.powerUpManagerCtrl = GetComponentInChildren<PowerUpManagerCtrl>();
+        Debug.LogWarning(transform.name + ": Load PowerUpManagerCtrl ", gameObject);
     }
 }

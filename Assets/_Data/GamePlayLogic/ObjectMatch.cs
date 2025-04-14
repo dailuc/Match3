@@ -6,13 +6,6 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class SwapMatchResult
-{
-    public Node nodeStart { get; set; }
-    public List<Transform> listStart { get; set; }
-    public Node nodeEnd { get; set; }
-    public List<Transform> listEnd { get; set; }
-}
 public class ObjectMatch : GamePlayManagerCtrlAbstract
 {
     [Header("Object Match")]
@@ -27,6 +20,7 @@ public class ObjectMatch : GamePlayManagerCtrlAbstract
 
         List<Transform> listStart = this.CheckMatch(nodeStart);
         List<Transform> listEnd = this.CheckMatch(nodeEnd);
+
         return new SwapMatchResult
         {
             nodeStart = nodeStart,
@@ -43,15 +37,21 @@ public class ObjectMatch : GamePlayManagerCtrlAbstract
         GridSystem gridSystem = GamePlayManagerCtrl.GridSystem;
 
         //string despawnedObjects = "Despawned objects: ";
-
+        var powerUps = Enum.GetValues(typeof(PowerUpCode)).Cast<PowerUpCode>().ToList();
         foreach (Transform obj in Objs)
         {
             Node node = gridSystem.GetNodeByObject(obj);
             node.obj = null;
 
-           // despawnedObjects += obj.name + ", "; 
-
-            FruitSpawner.Instance.Despawn(obj);
+            // despawnedObjects += obj.name + ", "; 
+            if (powerUps.Any(code => obj.name.Contains(code.ToString())))
+            {
+                FruitPowerUpSpawner.Instance.Despawn(obj);
+            }
+            else
+            {
+                FruitSpawner.Instance.Despawn(obj);
+            }
         }
 
       //  Debug.Log(despawnedObjects); 
@@ -70,7 +70,7 @@ public class ObjectMatch : GamePlayManagerCtrlAbstract
         {
             Transform currentObj = currentNode.GetObject();
             if (currentObj == null) break;
-            if (!currentObj.name.Contains(targetName)) break;
+            if (!targetName.Contains(currentObj.name) && !currentObj.name.Contains(targetName)) break;
 
             result.Add(currentObj);
             currentNode = nextNodeFunc(currentNode);
@@ -114,16 +114,17 @@ public class ObjectMatch : GamePlayManagerCtrlAbstract
     };
 
         lists.RemoveAll(list => list.Count < 3);
-        return lists.SelectMany(list => list).ToList();
+        return lists.SelectMany(list => list).Distinct().ToList();
     }
 
-    public virtual List<Transform> CheckFullBoard()
+
+    public virtual List<List<Transform>> CheckFullBoard()
     {
         Node[,] nodes = GamePlayManagerCtrl.GridSystem.GetNodes();
         int height = nodes.GetLength(0);
         int width = nodes.GetLength(1);
 
-        HashSet<Transform> matchedObjects = new HashSet<Transform>();
+        List<List<Transform>> allMatches = new List<List<Transform>>();
 
         for (int i = 0; i < width; i++)
         {
@@ -131,17 +132,21 @@ public class ObjectMatch : GamePlayManagerCtrlAbstract
             {
                 Node node = nodes[i, j];
                 Transform obj = node.GetObject();
-                if (obj == null || matchedObjects.Contains(obj)) continue;
+
+                if (obj == null )
+                    continue;
 
                 List<Transform> matchList = CheckMatch(node);
-                foreach (Transform matchedObj in matchList)
+
+                if (matchList.Count > 0)
                 {
-                    matchedObjects.Add(matchedObj);
+                    Debug.Log(matchList.Count);
+                    allMatches.Add(matchList);
                 }
             }
         }
-
-        return matchedObjects.ToList();
+        Debug.LogWarning("need optimization");
+        return allMatches;
     }
 
 }

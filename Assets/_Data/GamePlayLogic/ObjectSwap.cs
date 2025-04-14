@@ -132,10 +132,10 @@ public class ObjectSwap : GamePlayManagerCtrlAbstract
     protected virtual void ProcessSwap(SwapMatchResult swapMatchResult, ref bool hasAnyMatch)
     {
         List<Transform> mergedList = new List<Transform>();
-        List<Node> nodeSpawnPowerUp = new List<Node>();
+        Dictionary<Node, List<Transform>> spawnPowerUpPerNode = new Dictionary<Node, List<Transform>>();
 
 
-        this.ProcessResult(swapMatchResult, ref mergedList, ref nodeSpawnPowerUp, ref hasAnyMatch);
+        this.ProcessResult(swapMatchResult, ref mergedList, ref spawnPowerUpPerNode, ref hasAnyMatch);
         if (hasAnyMatch)
         {
             this.ReSetObject();
@@ -144,11 +144,11 @@ public class ObjectSwap : GamePlayManagerCtrlAbstract
             mergedList.AddRange(swapMatchResult.listStart);
             mergedList.AddRange(swapMatchResult.listEnd);
 
-            StartCoroutine(GamePlayManagerCtrl.ObjectHandle.ProcessChainReaction(mergedList, nodeSpawnPowerUp));
+            StartCoroutine(GamePlayManagerCtrl.ObjectHandle.ProcessChainReaction(mergedList, spawnPowerUpPerNode));
         }
     }
     protected virtual void ProcessResult(SwapMatchResult swapMatchResult, ref List<Transform> mergedList
-                                        , ref List<Node> nodeSpawnPowerUp, ref bool hasAnyMatch)
+                                        ,ref Dictionary<Node, List<Transform>> spawnPowerUpPerNode, ref bool hasAnyMatch)
     {
         var listToCheck = new List<(List<Transform> list, Node node)>
             {
@@ -159,10 +159,11 @@ public class ObjectSwap : GamePlayManagerCtrlAbstract
         {
             if (list.Count > 0)
             {
+
                 hasAnyMatch = true;
                 if (list.Count >= 5)
                 {
-                    nodeSpawnPowerUp.Add(node);
+                    spawnPowerUpPerNode.Add(node,list);
                 }
             }
         }

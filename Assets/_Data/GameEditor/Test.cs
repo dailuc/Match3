@@ -39,6 +39,9 @@ public class Test : BaseMonoBehaviour
                         case KeyCode.Alpha6:
                             this.SwapFruit(FruitSpawner.Strawberry, InputManager.Instance.GetObjectUnderMouse());
                             break;
+                        case KeyCode.Alpha7:
+                            this.SwapPowerUpFruit(FruitPowerUpSpawner.Apple_Bomb, InputManager.Instance.GetObjectUnderMouse());
+                            break;
                         default:
                             break;
                     }
@@ -55,6 +58,17 @@ public class Test : BaseMonoBehaviour
         obj.gameObject.SetActive(true);
         FruitSpawner.Instance.Despawn(objSwap);
         
+        node.obj = null;
+        node.obj = obj;
+
+    }
+    protected virtual void SwapPowerUpFruit(string objName, Transform objSwap)
+    {
+        Node node = GamePlayManagerCtrl.Instance.GridSystem.GetNodeByObject(objSwap);
+        Transform obj = FruitPowerUpSpawner.Instance.Spawn(objName, objSwap.position, Quaternion.identity);
+        obj.gameObject.SetActive(true);
+        FruitSpawner.Instance.Despawn(objSwap);
+
         node.obj = null;
         node.obj = obj;
 

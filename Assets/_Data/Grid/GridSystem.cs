@@ -106,6 +106,34 @@ public class GridSystem : GamePlayManagerCtrlAbstract
         Vector2Int XY = this.GetXYByWorldPos(worldPos);
         return this.GetNodeByXY(XY.x, XY.y);
     }
+    public virtual Node GetCenterPosition(List<Node> nodes)
+    {
+        int totalX = 0;
+        int totalY = 0;
+
+        int minX = int.MaxValue;
+        int maxX = int.MinValue;
+        int minY = int.MaxValue;
+        int maxY = int.MinValue;
+        foreach (var node in nodes)
+        {
+            totalX += node.x;
+            totalY += node.y;
+
+            if (node.x < minX) minX = node.x;
+            if (node.x > maxX) maxX = node.x;
+            if (node.y < minY) minY = node.y;
+            if (node.y > maxY) maxY = node.y;
+        }
+
+        int centerX = totalX / nodes.Count;
+        int centerY = totalY / nodes.Count;
+
+        centerX = Mathf.Clamp(centerX, minX, maxX);
+        centerY = Mathf.Clamp(centerY, minY, maxY);
+
+        return this.nodes[centerX,centerY];
+    }
     protected virtual void FindNodesNeighbors()
     {
         int x, y;

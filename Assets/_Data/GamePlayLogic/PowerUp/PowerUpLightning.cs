@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class PowerUpLightning : BasePowerUp
 {
-    public override void ActivePowerUp(Transform ObjectActive, PowerUpCode code)
+    public override List<Transform> PowerUpDespawn(Transform ObjectActive, PowerUpCode code)
     {
-       
-
+        return null;
     }
-    
+
 }

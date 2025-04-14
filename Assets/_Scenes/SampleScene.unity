@@ -383,6 +383,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &122886153
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 122886155}
+  - component: {fileID: 122886154}
+  m_Layer: 0
+  m_Name: PowerUpSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &122886154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122886153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da06b47b7afa53a4fba6402a7b4bfa82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gamePlayManagerCtrl: {fileID: 459835610}
+--- !u!4 &122886155
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122886153}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2134968226}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &197399563
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,12 +803,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 318694327}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 459835609}
+  m_Father: {fileID: 2134968226}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &318694329
 MonoBehaviour:
@@ -1069,9 +1114,6 @@ Transform:
   - {fileID: 1194050641}
   - {fileID: 2051778538}
   - {fileID: 2134968226}
-  - {fileID: 1823819230}
-  - {fileID: 318694328}
-  - {fileID: 531571068}
   m_Father: {fileID: 891973736}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &459835610
@@ -1091,6 +1133,7 @@ MonoBehaviour:
   objectMatch: {fileID: 1194050642}
   objectFall: {fileID: 786819801}
   objectSwap: {fileID: 2051778536}
+  powerUpManagerCtrl: {fileID: 2134968227}
 --- !u!1 &502931236
 GameObject:
   m_ObjectHideFlags: 0
@@ -1292,12 +1335,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 531571067}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 459835609}
+  m_Father: {fileID: 2134968226}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &531571069
 MonoBehaviour:
@@ -3317,12 +3360,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823819229}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 459835609}
+  m_Father: {fileID: 2134968226}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1823819231
 MonoBehaviour:
@@ -4042,8 +4085,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2134968226}
+  - component: {fileID: 2134968227}
   m_Layer: 0
-  m_Name: ---PowerUp---------------
+  m_Name: PowerUpManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4061,9 +4105,27 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 122886155}
+  - {fileID: 531571068}
+  - {fileID: 318694328}
+  - {fileID: 1823819230}
   m_Father: {fileID: 459835609}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2134968227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134968225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4c5b5f83f6fce45ae6f943feb6e40d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powerUpSpawn: {fileID: 122886154}
+  powerUpBomb: {fileID: 1823819231}
 --- !u!1 &2141281580
 GameObject:
   m_ObjectHideFlags: 0

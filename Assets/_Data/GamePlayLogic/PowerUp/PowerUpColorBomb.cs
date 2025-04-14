@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class PowerUpColorBomb : BasePowerUp
 {
-    public override void ActivePowerUp(Transform ObjectActive, PowerUpCode code)
+    public override List<Transform> PowerUpDespawn(Transform ObjectActive, PowerUpCode code)
     {
-        if (code != PowerUpCode.ColorBomb) return;
-        List<Transform> allColorObjects = this.FindAllColorObjects(ObjectActive);
-       // StartCoroutine(this.GamePlayManagerCtrl.ObjectHandle.ProcessChainReaction(allColorObjects));
+        List<Transform> affectedObjects = this.FindAllColorObjects(ObjectActive);
+        return affectedObjects;
     }
     protected virtual List<Transform> FindAllColorObjects(Transform obj)
     {
